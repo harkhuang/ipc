@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 2.8.11)
+project(relay_nobolck)
+#add_subdirectory(SRC_DIR .)
+#add_library(LIB relay.c)
+#target_include_directories(INC_DIR .)
+#link_directories({LIBDIR}    .)
+add_executable(relay_noblock main.c librelay.c)
+target_link_libraries(relay_noblock -lpthread )

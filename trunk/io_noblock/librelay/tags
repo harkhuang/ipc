@@ -1,0 +1,62 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.5	//
+BUFSIZE	librelay.c	12;"	d	file:
+LIBRELAY_H	librelay.h	2;"	d
+RELAY_JOBMAX	librelay.h	4;"	d
+STATE_CANCELED	librelay.h	/^	STATE_CANCELED,$/;"	e
+STATE_RUNNING	librelay.h	/^	STATE_RUNNING=1,$/;"	e
+STATE_TERMINATED	librelay.h	/^	STATE_TERMINATED$/;"	e
+ST_Ex	librelay.c	/^	ST_Ex,$/;"	e	file:
+ST_R	librelay.c	/^	ST_R=1,$/;"	e	file:
+ST_T	librelay.c	/^	ST_T$/;"	e	file:
+ST_W	librelay.c	/^	ST_W,$/;"	e	file:
+TTY1	main.c	8;"	d	file:
+TTY2	main.c	9;"	d	file:
+TTY3	main.c	10;"	d	file:
+TTY4	main.c	11;"	d	file:
+buf	librelay.c	/^	char buf[BUFSIZE];$/;"	m	struct:fsa_relay_st	file:
+cond	librelay.c	/^	pthread_cond_t	cond;$/;"	m	struct:relay_job_st	file:
+count	librelay.c	/^	int64_t count;$/;"	m	struct:fsa_relay_st	file:
+count12	librelay.h	/^	int64_t count12, count21;$/;"	m	struct:relay_jobstat_st
+count21	librelay.h	/^	int64_t count12, count21;$/;"	m	struct:relay_jobstat_st
+dfd	librelay.c	/^	int sfd, dfd;$/;"	m	struct:fsa_relay_st	file:
+end	librelay.c	/^	time_t start, end;$/;"	m	struct:relay_job_st	file:
+end	librelay.h	/^	time_t start, end;$/;"	m	struct:relay_jobstat_st
+errstr	librelay.c	/^	char *errstr;$/;"	m	struct:fsa_relay_st	file:
+fd1	librelay.c	/^	int fd1, fd2;$/;"	m	struct:relay_job_st	file:
+fd1	librelay.h	/^	int fd1, fd2;$/;"	m	struct:relay_jobstat_st
+fd1_saveflag	librelay.c	/^	int fd1_saveflag, fd2_saveflag;$/;"	m	struct:relay_job_st	file:
+fd2	librelay.c	/^	int fd1, fd2;$/;"	m	struct:relay_job_st	file:
+fd2	librelay.h	/^	int fd1, fd2;$/;"	m	struct:relay_jobstat_st
+fd2_saveflag	librelay.c	/^	int fd1_saveflag, fd2_saveflag;$/;"	m	struct:relay_job_st	file:
+fsa12	librelay.c	/^	struct fsa_relay_st fsa12, fsa21;$/;"	m	struct:relay_job_st	file:
+fsa21	librelay.c	/^	struct fsa_relay_st fsa12, fsa21;$/;"	m	struct:relay_job_st	file:
+fsa_driver	librelay.c	/^static void fsa_driver(struct fsa_relay_st *fsa)$/;"	f	file:
+fsa_relay_st	librelay.c	/^struct fsa_relay_st {$/;"	s	file:
+get_free_pos_unlocked	librelay.c	/^static int get_free_pos_unlocked(void)$/;"	f	file:
+init_once	librelay.c	/^static pthread_once_t	init_once = PTHREAD_ONCE_INIT;$/;"	v	file:
+job	librelay.c	/^static struct relay_job_st *job[RELAY_JOBMAX];$/;"	v	file:
+len	librelay.c	/^	int len, pos;$/;"	m	struct:fsa_relay_st	file:
+main	main.c	/^main()$/;"	f
+module_load	librelay.c	/^static void module_load(void)$/;"	f	file:
+mut	librelay.c	/^	pthread_mutex_t  mut;$/;"	m	struct:relay_job_st	file:
+mut_job	librelay.c	/^static pthread_mutex_t	mut_job = PTHREAD_MUTEX_INITIALIZER;$/;"	v	file:
+pos	librelay.c	/^	int len, pos;$/;"	m	struct:fsa_relay_st	file:
+relay_addjob	librelay.c	/^int relay_addjob(int fd1, int fd2)$/;"	f
+relay_canceljob	librelay.c	/^int relay_canceljob(int id)$/;"	f
+relay_job_st	librelay.c	/^struct relay_job_st {$/;"	s	file:
+relay_jobstat_st	librelay.h	/^struct relay_jobstat_st {$/;"	s
+relay_statjob	librelay.c	/^int relay_statjob(int id, struct relay_jobstat_st *res)$/;"	f
+relay_waitjob	librelay.c	/^int relay_waitjob(int id, struct relay_jobstat_st *res)$/;"	f
+sfd	librelay.c	/^	int sfd, dfd;$/;"	m	struct:fsa_relay_st	file:
+start	librelay.c	/^	time_t start, end;$/;"	m	struct:relay_job_st	file:
+start	librelay.h	/^	time_t start, end;$/;"	m	struct:relay_jobstat_st
+state	librelay.c	/^	int state;$/;"	m	struct:fsa_relay_st	file:
+state	librelay.c	/^	int state;$/;"	m	struct:relay_job_st	file:
+state	librelay.h	/^	int state;$/;"	m	struct:relay_jobstat_st
+thr_relayer	librelay.c	/^static void *thr_relayer(void *unused)$/;"	f	file:
+tid_driver	librelay.c	/^static pthread_t tid_driver;$/;"	v	file:
