@@ -1,0 +1,49 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BUFSIZE	server.c	13;"	d	file:
+BUFSIZE	server0.c	10;"	d	file:
+BUFSIZE	server1.c	11;"	d	file:
+BUFSIZE	webget.c	9;"	d	file:
+FMT_STAMP	proto.h	6;"	d
+IPSTRSIZE	server.c	39;"	d	file:
+IPSTRSIZE	server0.c	34;"	d	file:
+IPSTRSIZE	server1.c	36;"	d	file:
+IPSTRSIZE	server_dyn_pool.c	17;"	d	file:
+LINESIZE	server_dyn_pool.c	18;"	d	file:
+MAXCLIENTS	server_dyn_pool.c	15;"	d	file:
+MAXSPARESERVERS	server_dyn_pool.c	14;"	d	file:
+MINSPARESERVERS	server_dyn_pool.c	13;"	d	file:
+POOLSIZE	server.c	11;"	d	file:
+PROTO_H	proto.h	2;"	d
+SERVERPORT	proto.h	4;"	d
+SIG_NOTIFY	server_dyn_pool.c	20;"	d	file:
+STATE_BUSY	server_dyn_pool.c	/^	STATE_BUSY$/;"	e	enum:__anon1	file:
+STATE_IDLE	server_dyn_pool.c	/^	STATE_IDLE=0,$/;"	e	enum:__anon1	file:
+add_1_server	server_dyn_pool.c	/^add_1_server(void)$/;"	f
+busy_count	server_dyn_pool.c	/^static int idle_count=0, busy_count=0;$/;"	v	file:
+del_1_server	server_dyn_pool.c	/^del_1_server(void)$/;"	f
+idle_count	server_dyn_pool.c	/^static int idle_count=0, busy_count=0;$/;"	v	file:
+main	client.c	/^main(int argc, char **argv)$/;"	f
+main	server.c	/^main()$/;"	f
+main	server0.c	/^main()$/;"	f
+main	server1.c	/^main()$/;"	f
+main	server_dyn_pool.c	/^main()$/;"	f
+main	webget.c	/^main(int argc, char **argv)$/;"	f
+msg_t	server_dyn_pool.c	/^typedef struct server_st msg_t;$/;"	t	typeref:struct:server_st	file:
+pid	server_dyn_pool.c	/^	pid_t pid;$/;"	m	struct:server_st	file:
+reuse	server_dyn_pool.c	/^	int reuse;$/;"	m	struct:server_st	file:
+scan_pool	server_dyn_pool.c	/^scan_pool(void)$/;"	f
+sd	server_dyn_pool.c	/^static int sd;$/;"	v	file:
+server_job	server.c	/^static void server_job(int newsd)$/;"	f	file:
+server_job	server0.c	/^static void server_job(int newsd)$/;"	f	file:
+server_job	server1.c	/^static void server_job(int newsd)$/;"	f	file:
+server_job	server_dyn_pool.c	/^static void server_job(int sd, int pos)$/;"	f	file:
+server_loop	server.c	/^static void server_loop(int sd)$/;"	f	file:
+server_st	server_dyn_pool.c	/^struct server_st {$/;"	s	file:
+serverpool	server_dyn_pool.c	/^static struct server_st *serverpool;$/;"	v	typeref:struct:server_st	file:
+state	server_dyn_pool.c	/^	int state;$/;"	m	struct:server_st	file:
+usr2_handler	server_dyn_pool.c	/^usr2_handler(int s)$/;"	f

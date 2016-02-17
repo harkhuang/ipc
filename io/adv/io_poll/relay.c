@@ -136,7 +136,22 @@ static void relay(int fd1, int fd2)
 		}
 
 
-		//wait to do someting
+
+	/*
+		EPOLLLT——水平触发
+		EPOLLET——边缘触发
+		epoll有EPOLLLT和EPOLLET两种触发模式，
+		LT是默认的模式，ET是“高速”模式。LT模式下，
+		只要这个fd还有数据可读，
+		每次 epoll_wait都会返回它的事件，
+		提醒用户程序去操作，而在ET（边缘触发）模式中，
+		它只会提示一次，直到下次再有数据流入之前都不会再提示了，
+		无 论fd中是否还有数据可读。所以在ET模式下，
+		read一个fd的时候一定要把它的buffer读光，
+		也就是说一直读到read的返回值小于请求值，或者 遇到EAGAIN错误。
+	*/
+		// wait to do someting  
+		// use poll 
 		while (poll(pfd, 2, -1)<0) {
 			if (errno!=EINTR) {
 				perror("poll()");
