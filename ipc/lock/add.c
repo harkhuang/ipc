@@ -8,11 +8,15 @@
 #define	PROCNUM	20
 
 #define	LINESIZE	100
+
+
+//add what 
 static void *add(void *ptr)
 {
 	FILE *fp;
 	char linebuf[LINESIZE];
-
+	
+	// open /temp/count
 	fp = fopen(FNAME, "r+");
 	if (fp==NULL) {
 		perror("fopen()");
