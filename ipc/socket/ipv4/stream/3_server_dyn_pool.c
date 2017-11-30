@@ -35,7 +35,7 @@ struct server_st {
 
 typedef struct server_st msg_t;//自定义服务器消息结构体
 
-static struct server_st *serverpool;//服务器所有子线程共享的服务器状态结构体
+static struct server_st *serverpool;  //服务器所有子线程共享的服务器状态结构体
 static int idle_count=0, busy_count=0;
 static int sd;
 
@@ -118,10 +118,7 @@ del_1_server(void)
 		}
 	}
 	return 0;
-}
-
-
-
+} 
 // 扫描工作组状态   并且更新  根据进程号  确定状态
 int
 scan_pool(void)
@@ -138,7 +135,9 @@ scan_pool(void)
 		}
 
 		// 干掉没有被使用的进程 ?? 合适使用被释放?? 看看add 和 del
-		if (kill(serverpool[i].pid, 0)) {
+		// 这是一个探测进程是否存在的函数 
+		// 冒泡老师解惑 2017年11月30日 17:11:23
+		if (kill(serverpool[i].pid, 0)) {  //用于同步 探测到进程情况 更新了进程状态
 			serverpool[i].pid = -1;
 			continue;
 		}
@@ -157,10 +156,8 @@ scan_pool(void)
 	return 0;
 }
 
-
-
-
-// 服务器工作组 分配
+// 服务业务处理逻辑
+// 这里处理的是真的业务
 static void server_job(int sd, int pos)
 {
 	int client_sd;
@@ -172,13 +169,14 @@ static void server_job(int sd, int pos)
 	int len;
 	pid_t ppid;
 
-	ppid = getppid();
+	ppid = getppid();//获取父进程id
 
-	peer_addr_len = sizeof(peer_addr);
+	peer_addr_len = sizeof(peer_addr); //求出peer 地址的长度
 	while (1) {
-		serverpool[pos].state = STATE_IDLE;
-		kill(ppid, SIG_NOTIFY);
-
+		serverpool[pos].state = STATE_IDLE; //状态机确定了这个卡槽可用
+		kill(ppid, SIG_NOTIFY);// 向父进程发送一个SIG_NOTIFY信号
+		
+		// 真的链接做业务就这么一行代码 我操! 做了三百行代码的准备 mlgb
 		client_sd = accept(sd, (sockaddr *)&peer_addr, &peer_addr_len);
 		if (client_sd<0) {
 			if (errno==EINTR || errno==EAGAIN) {
@@ -188,11 +186,14 @@ static void server_job(int sd, int pos)
 			exit(1);
 		}
 
+		//设置状态为忙碌
 		serverpool[pos].state = STATE_BUSY;
+
+		// 发送一个同步信号 
 		kill(ppid, SIG_NOTIFY);
 
 		inet_ntop(AF_INET, &peer_addr.sin_addr, ipstr, IPSTRSIZE);
-//		printf("[%d]: Client: %s:%d\n", getpid(), ipstr, ntohs(peer_addr.sin_port));
+		//printf("[%d]: Client: %s:%d\n", getpid(), ipstr, ntohs(peer_addr.sin_port));
 		stamp = time(NULL);
 
 		len = snprintf(linebuf, LINESIZE, FMT_STAMP, stamp);
@@ -217,6 +218,7 @@ main()
 	int val;
 
 
+	// 主要做信号处理  定义我们关心和不关心的信号  和信号的默认操作 
 	// 定义信号的回调函数 和信号默认掩码
 	sa.sa_handler = SIG_IGN; // 默认处理句柄
 	sigemptyset(&sa.sa_mask);// 清空信号集
@@ -267,11 +269,11 @@ main()
 	//设置socket高级属性  SO_REUSEADDR表示可以重复使用的socket
 
 	/*
-	int PASCAL FAR setsockopt ( SOCKET s, //socket标识
-	int level, //定义层次  目前支持sol_socket 和 ipproto_tcp
-	int optname,  //设置选项
-	const char FAR* optval,//指向存放选项值的缓冲区    选项中可能带有参数  所以用此形势表现参数 都可以被传递  这里用到的选项仅仅是是否可以重复使用 所以 没问题true
-	int optlen);//缓冲区长度
+		int PASCAL FAR setsockopt ( SOCKET s, //socket标识
+		int level, //定义层次  目前支持sol_socket 和 ipproto_tcp
+		int optname,  //设置选项
+		const char FAR* optval,//指向存放选项值的缓冲区    选项中可能带有参数  所以用此形势表现参数 都可以被传递  这里用到的选项仅仅是是否可以重复使用 所以 没问题true
+		int optlen);//缓冲区长度
 	*/
 
 	if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &bReuseaddr, sizeof(val))<0) {
@@ -301,6 +303,9 @@ main()
 		add_1_server();
 	}
 
+
+
+	// 不停的循环调用控制工作组 进程 这里循环最大次数有限制吗???
 	while (1) {
 
 
@@ -310,8 +315,10 @@ main()
 		sigsuspend(&oset);//信号
 
 
-
+        //更新pool中可用状态
 		scan_pool();
+
+        // 根据状态 做业务分配
 		if (idle_count > MAXSPARESERVERS) {
 		//fprintf(stderr, "[%d]: kill %d server(s).\n", getpid(), (idle_count-MAXSPARESERVERS));
 			for (i=0;i<(idle_count-MAXSPARESERVERS);++i) {
