@@ -218,13 +218,13 @@ main()
 
 
 	// 定义信号的回调函数 和信号默认掩码
-	sa.sa_handler = SIG_IGN; //默认处理句柄
-	sigemptyset(&sa.sa_mask);//清空信号集
-	sa.sa_flags = SA_NOCLDWAIT;//设置SA_NOCLDWAIT选项后,当信号为SIGCHILD时,则调用进程的子进程终止,立即释放系统资源。
-	sigaction(SIGCHLD, &sa, &osa);//信号集设置
+	sa.sa_handler = SIG_IGN; // 默认处理句柄
+	sigemptyset(&sa.sa_mask);// 清空信号集
+	sa.sa_flags = SA_NOCLDWAIT;// 设置SA_NOCLDWAIT选项后,当信号为SIGCHILD时,则调用进程的子进程终止,立即释放系统资源。
+	sigaction(SIGCHLD, &sa, &osa);// 信号集设置
 
-	sa.sa_handler = usr2_handler; //默认的信号调用函数
-	sigemptyset(&sa.sa_mask);//清空信号集
+	sa.sa_handler = usr2_handler; // 默认的信号调用函数
+	sigemptyset(&sa.sa_mask);// 清空信号集
 	sa.sa_flags = 0;
 	sigaction(SIG_NOTIFY, &sa, &osa);
 
@@ -302,7 +302,15 @@ main()
 	}
 
 	while (1) {
+
+
+		//设置异步处理信号相关模型   
+		//这里主要是控制状态机模型
+		//异步操作全靠这小小信号回调的控制
 		sigsuspend(&oset);//信号
+
+
+
 		scan_pool();
 		if (idle_count > MAXSPARESERVERS) {
 		//fprintf(stderr, "[%d]: kill %d server(s).\n", getpid(), (idle_count-MAXSPARESERVERS));
