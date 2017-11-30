@@ -109,7 +109,6 @@ del_1_server(void)
 		// 条件是有着pid而且状态是idle  idle表示在使用状态
 		if (serverpool[i].pid !=-1 && serverpool[i].state == STATE_IDLE) {
 
-
 			// 这里所谓的竞争是不是没有考虑到busy的情况
 			// 这里表示谁和谁的竞争呢?
 			kill(serverpool[i].pid, SIGTERM); /* FIXME: 可能有竞争BUG */
@@ -121,26 +120,35 @@ del_1_server(void)
 	return 0;
 }
 
+
+
+// 扫描工作组状态   并且更新  根据进程号  确定状态
 int
 scan_pool(void)
 {
+	// 任务池检查器
 	int i, idle=0, busy=0;
 
+	// 
 	for (i=0;i<MAXCLIENTS;++i) {
+
+		// 找到第一个pid为-1的值   如果没有  继续往下走??why
 		if (serverpool[i].pid == -1) {
 			continue;
 		}
 
-		
+		// 干掉没有被使用的进程 ?? 合适使用被释放?? 看看add 和 del
 		if (kill(serverpool[i].pid, 0)) {
 			serverpool[i].pid = -1;
 			continue;
 		}
-		if (serverpool[i].state == STATE_IDLE) {
+
+		
+		if (serverpool[i].state == STATE_IDLE) {// 空闲进程 计数器
 			idle++;
-		} else if (serverpool[i].state == STATE_BUSY) {
+		} else if (serverpool[i].state == STATE_BUSY) {//繁忙进程计数器
 			busy++;
-		} else {
+		} else {//未知状态机
 			fprintf(stderr, "Unknown state.\n");
 			abort();
 		}
@@ -149,6 +157,10 @@ scan_pool(void)
 	return 0;
 }
 
+
+
+
+// 服务器工作组 分配
 static void server_job(int sd, int pos)
 {
 	int client_sd;
@@ -206,20 +218,20 @@ main()
 
 
 	// 定义信号的回调函数 和信号默认掩码
-	sa.sa_handler = SIG_IGN; 
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_NOCLDWAIT;
-	sigaction(SIGCHLD, &sa, &osa);
+	sa.sa_handler = SIG_IGN; //默认处理句柄
+	sigemptyset(&sa.sa_mask);//清空信号集
+	sa.sa_flags = SA_NOCLDWAIT;//设置SA_NOCLDWAIT选项后,当信号为SIGCHILD时,则调用进程的子进程终止,立即释放系统资源。
+	sigaction(SIGCHLD, &sa, &osa);//信号集设置
 
-	sa.sa_handler = usr2_handler;
-	sigemptyset(&sa.sa_mask);
+	sa.sa_handler = usr2_handler; //默认的信号调用函数
+	sigemptyset(&sa.sa_mask);//清空信号集
 	sa.sa_flags = 0;
 	sigaction(SIG_NOTIFY, &sa, &osa);
 
 	sigemptyset(&set);
 	sigaddset(&set, SIG_NOTIFY);
 
-	// 吧新的信号集合替换旧的集合
+	// 把新的信号集合替换旧的集合
 	sigprocmask(SIG_BLOCK, &set, &oset);
 
 
@@ -237,24 +249,38 @@ main()
 		exit(1);
 	}
 
-	// 
+	// 初始化共享内存  pid设置为-1
 	for (i=0;i<MAXCLIENTS;++i) {
 		serverpool[i].pid=-1;
 	}
 
+
+	// 设置套接字基本属性  ipv4  tcp  stream
 	sd=socket(AF_INET, SOCK_STREAM, 0);
 	if (sd==-1) {
 		perror("socket()");
 		exit(1);
 	}
 
-	val = 1;
-	if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val))<0) {
+	// val = 1; //  这个值表示可以重复使用的socket
+	int bReuseaddr=1;  //可以重复使用的socket
+	//设置socket高级属性  SO_REUSEADDR表示可以重复使用的socket
+
+	/*
+	int PASCAL FAR setsockopt ( SOCKET s, //socket标识
+	int level, //定义层次  目前支持sol_socket 和 ipproto_tcp
+	int optname,  //设置选项
+	const char FAR* optval,//指向存放选项值的缓冲区    选项中可能带有参数  所以用此形势表现参数 都可以被传递  这里用到的选项仅仅是是否可以重复使用 所以 没问题true
+	int optlen);//缓冲区长度
+	*/
+
+	if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &bReuseaddr, sizeof(val))<0) {
 		perror("setsockopt(..., SO_REUSEADDR, ...)");
 	}
 
+	// 设置ipv4
 	myend.sin_family = AF_INET;
-	myend.sin_port = htons(atoi(SERVERPORT));
+	myend.sin_port = htons(atoi(SERVERPORT)); // 设置端口号 
 	inet_pton(AF_INET, "0.0.0.0", &myend.sin_addr);
 	ret=bind(sd, (struct sockaddr*)&myend, sizeof(myend));
 	if (ret==-1) {
@@ -262,21 +288,24 @@ main()
 		exit(1);
 	}
 
+	// 监听这个
 	ret=listen(sd, 100);
 	if (ret==-1) {
 		perror("listen()");
 		exit(1);
 	}
 
+
+	// 最小剩余 工作组
 	for (i=0;i<MINSPARESERVERS;++i) {
 		add_1_server();
 	}
 
 	while (1) {
-		sigsuspend(&oset);
+		sigsuspend(&oset);//信号
 		scan_pool();
 		if (idle_count > MAXSPARESERVERS) {
-//fprintf(stderr, "[%d]: kill %d server(s).\n", getpid(), (idle_count-MAXSPARESERVERS));
+		//fprintf(stderr, "[%d]: kill %d server(s).\n", getpid(), (idle_count-MAXSPARESERVERS));
 			for (i=0;i<(idle_count-MAXSPARESERVERS);++i) {
 				del_1_server();
 			}
