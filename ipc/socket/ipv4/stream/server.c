@@ -5,18 +5,23 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-
 #include "proto.h"
+#include <time.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
 
 #define	POOLSIZE	4
 
 #define	BUFSIZE	1024
 
+
 //define server job 
 static void server_job(int newsd)
 {
-	char buf[BUFSIZE];//define a buf
-	ssize_t len;//define the len of ?
+	char buf[BUFSIZE];
+	ssize_t len;
 	int pos, ret;//value  return  and  postion
 	len = snprintf(buf, BUFSIZE, FMT_STAMP, (long long)time(NULL));
 	pos = 0;
@@ -47,7 +52,7 @@ static void server_loop(int sd)
 
 	raddr_len = sizeof(raddr);
 	while (1) {
-		newsd = accept(sd, (void*)&raddr, &raddr_len);
+		newsd = accept(sd, (sockaddr*)&raddr, &raddr_len);
 		if (newsd<0) {
 			if (errno==EINTR || errno==EAGAIN) {
 				continue;
@@ -88,7 +93,7 @@ main()
 	laddr.sin_family = AF_INET;
 	laddr.sin_port = htons(atoi(SERVERPORT));
 	inet_pton(AF_INET, "0.0.0.0", &laddr.sin_addr);
-	if (bind(sd, (void*)&laddr, sizeof(laddr))<0) {
+	if (bind(sd, ( sockaddr* )&laddr, sizeof(laddr))<0) {
 		perror("bind()");
 		exit(1);
 	}
