@@ -105,3 +105,178 @@ void	TELL_PARENT(pid_t);
 void	WAIT_PARENT(void);
 void	TELL_CHILD(pid_t);
 void	WAIT_CHILD(void);
+
+int
+crlf_add(char *dst, int dstsize, const char *src, int lenin)
+{
+	int 	lenout;
+	char	c;
+
+	if ( (lenout = lenin) > dstsize)
+			err_quit("crlf_add: destination not big enough");
+
+	for ( ; lenin > 0; lenin--) {
+		if ( (c = *src++) == '\n') {
+			if (++lenout >= dstsize)
+				err_quit("crlf_add: destination not big enough");
+			*dst++ = '\r';
+		}
+		*dst++ = c;
+	}
+
+	return(lenout);
+}
+
+int
+crlf_strip(char *dst, int dstsize, const char *src, int lenin)
+{
+	int		lenout;
+	char	c;
+
+	for (lenout = 0; lenin > 0; lenin--) { 
+		if ( (c = *src++) != '\r') {
+			if (++lenout >= dstsize)
+				err_quit("crlf_strip: destination not big enough");
+			*dst++ = c;
+		}
+	}
+
+	return(lenout);
+}
+
+
+
+
+
+#include <errno.h>		/* for definition of errno */
+#include <stdarg.h>		/* ISO C variable aruments */
+
+static void	err_doit(int, int, const char *, va_list);
+
+/*
+ * Nonfatal error related to a system call.
+ * Print a message and return.
+ */
+void
+err_ret(const char *fmt, ...)
+{
+	va_list		ap;
+
+	va_start(ap, fmt);
+	err_doit(1, errno, fmt, ap);
+	va_end(ap);
+}
+
+/*
+ * Fatal error related to a system call.
+ * Print a message and terminate.
+ */
+void
+err_sys(const char *fmt, ...)
+{
+	va_list		ap;
+
+	va_start(ap, fmt);
+	err_doit(1, errno, fmt, ap);
+	va_end(ap);
+	exit(1);
+}
+
+/*
+ * Fatal error unrelated to a system call.
+ * Error code passed as explict parameter.
+ * Print a message and terminate.
+ */
+void
+err_exit(int error, const char *fmt, ...)
+{
+	va_list		ap;
+
+	va_start(ap, fmt);
+	err_doit(1, error, fmt, ap);
+	va_end(ap);
+	exit(1);
+}
+
+/*
+ * Fatal error related to a system call.
+ * Print a message, dump core, and terminate.
+ */
+void
+err_dump(const char *fmt, ...)
+{
+	va_list		ap;
+
+	va_start(ap, fmt);
+	err_doit(1, errno, fmt, ap);
+	va_end(ap);
+	abort();		/* dump core and terminate */
+	exit(1);		/* shouldn't get here */
+}
+
+/*
+ * Nonfatal error unrelated to a system call.
+ * Print a message and return.
+ */
+void
+err_msg(const char *fmt, ...)
+{
+	va_list		ap;
+
+	va_start(ap, fmt);
+	err_doit(0, 0, fmt, ap);
+	va_end(ap);
+}
+
+/*
+ * Fatal error unrelated to a system call.
+ * Print a message and terminate.
+ */
+void
+err_quit(const char *fmt, ...)
+{
+	va_list		ap;
+
+	va_start(ap, fmt);
+	err_doit(0, 0, fmt, ap);
+	va_end(ap);
+	exit(1);
+}
+
+/*
+ * Print a message and return to caller.
+ * Caller specifies "errnoflag".
+ */
+static void
+err_doit(int errnoflag, int error, const char *fmt, va_list ap)
+{
+	char	buf[MAXLINE];
+
+	vsnprintf(buf, MAXLINE, fmt, ap);
+	if (errnoflag)
+		snprintf(buf+strlen(buf), MAXLINE-strlen(buf), ": %s",
+		  strerror(error));
+	strcat(buf, "\n");
+	fflush(stdout);		/* in case stdout and stderr are the same */
+	fputs(buf, stderr);
+	fflush(NULL);		/* flushes all stdio output streams */
+}
+
+
+ssize_t						/* Write "n" bytes to a descriptor. */
+writen(int fd, const void *vptr, size_t n)
+{
+	size_t		nleft, nwritten;
+	const char	*ptr;
+
+	ptr = vptr;	/* can't do pointer arithmetic on void* */
+	nleft = n;
+	while (nleft > 0) {
+		if ( (nwritten = write(fd, ptr, nleft)) <= 0)
+			return(nwritten);		/* error */
+
+		nleft -= nwritten;
+		ptr   += nwritten;
+	}
+	return(n);
+}
