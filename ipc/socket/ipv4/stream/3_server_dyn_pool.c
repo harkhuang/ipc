@@ -8,7 +8,27 @@
 #include <sys/wait.h>
 #include <sys/mman.h>
 
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include "proto.h"
+#include <time.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
+
+
+#define	SERVERPORT	"1988"
+
+#define	FMT_STAMP	"sleep  2 second  and return time Stamp: %ld\r\n"
+
 
 #define MINSPARESERVERS 5
 #define MAXSPARESERVERS 10
@@ -174,8 +194,11 @@ static void server_job(int sd, int pos)
 	peer_addr_len = sizeof(peer_addr); //求出peer 地址的长度
 	while (1) {
 		serverpool[pos].state = STATE_IDLE; //状态机确定了这个卡槽可用
+
+
+		// SIGUSR2这里定义为通知父进程的一个信号
 		kill(ppid, SIG_NOTIFY);// 向父进程发送一个SIG_NOTIFY信号
-		
+ 
 		// 真的链接做业务就这么一行代码 我操! 做了三百行代码的准备 mlgb
 		client_sd = accept(sd, (sockaddr *)&peer_addr, &peer_addr_len);
 		if (client_sd<0) {
@@ -199,8 +222,10 @@ static void server_job(int sd, int pos)
 		len = snprintf(linebuf, LINESIZE, FMT_STAMP, stamp);
 		/* FIXME: If LINESIZE is not big enough */
 
+		// 好了发送数据到客户端
 		send(client_sd, linebuf, len, 0);
-
+		
+		// 睡觉五秒钟  模拟业务
 		sleep(5);
 
 		close(client_sd);
