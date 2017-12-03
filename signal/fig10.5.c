@@ -66,7 +66,7 @@ my_alarm(int signo)
 {
 	struct passwd	*rootptr;
 
-	printf("in signal handler\n");
+	printf("in signal handler\n"); // 
 	if ((rootptr = getpwnam("root")) == NULL)
 			err_sys("getpwnam(root) error");
 	alarm(1);
