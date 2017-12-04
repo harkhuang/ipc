@@ -11,6 +11,10 @@ sig_alrm(int signo)
 
 
 //  模拟的第一个sleep函数
+
+// 缺陷在哪里?
+// 1.
+// 2.
 unsigned int
 sleep1(unsigned int nsecs)
 {
@@ -19,4 +23,9 @@ sleep1(unsigned int nsecs)
 	alarm(nsecs);		/* start the timer */
 	pause();			/* next caught signal wakes us up */
 	return(alarm(0));	/* turn off timer, return unslept time */
+}
+int main()
+{
+	sleep1(1);
+	return 0;
 }

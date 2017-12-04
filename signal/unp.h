@@ -82,6 +82,10 @@
 #define	send(a,b,c,d)	sendto(a,b,c,d,0,0)
 #endif
 
+ 
+typedef	unsigned char		u_char;
+typedef	unsigned short		u_short;
+typedef	unsigned int		u_int;
 #if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
 typedef	unsigned char		u_char;
 typedef	unsigned short		u_short;
@@ -94,11 +98,7 @@ typedef	unsigned short		ushort;		/* Sys V compatibility */
 typedef	unsigned int		uint;		/* Sys V compatibility */
 #endif
 
-
-typedef	unsigned char		u_char;
-typedef	unsigned short		u_short;
-typedef	unsigned int		u_int;
-
+ 
 
 
 
