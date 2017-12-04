@@ -12,7 +12,6 @@
 #include <signal.h>		/* for SIG_ERR */
 #include <sys/types.h>
 #include <pwd.h>
-#include <uuid/uuid.h>
 #include <stdarg.h>
 
 static void err_doit(int errnoflag, int error, const char *fmt, va_list ap)
@@ -61,27 +60,79 @@ err_sys(const char *fmt, ...)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+// 不可重入函数getpwnam在使用signal函数时候的一些不可预期的调用
+// 不安全的调用会引起一些不期望的预期发生
+//上面都是一些容错 重点看下面这部分代码
+
+
+////输出
+//get hk name ok
+//in signal handler
+//get root name ok
+//return value corrupted!, pw_name = root
+//get hk name ok
+//in signal handler
+//get root name ok
+//return value corrupted!, pw_name = root
+//get hk name ok
+//in signal handler
+//get root name ok
+//return value corrupted!, pw_name = root
+//get hk name ok
+
 static void
 my_alarm(int signo)
 {
-	struct passwd	*rootptr;
+	struct passwd	*rootptr; //定义请求密码的系统调用的函数返回结构体
 
-	printf("in signal handler\n"); // 
-	if ((rootptr = getpwnam("root")) == NULL)
-			err_sys("getpwnam(root) error");
-	alarm(1);
+	printf("in signal handler\n"); // 打印我正在回调函数
+	if ((rootptr = getpwnam("root")) == NULL) //  root密码查询
+	{
+		err_sys("getpwnam(root) error");//错误输出
+	}
+	else {
+		
+		printf("get root name ok\n");
+	}
+
+	alarm(2);    //  信号回调中再次发送信号 此处相当于用信号做了循环
 }
 
+
+// 程序目的  回调和主调同事调用不安全的函数getpwnam获取不同的结果
 int main(void)
 {
-	struct passwd	*ptr;
-	signal(SIGALRM, my_alarm);
-	alarm(1);
+	struct passwd	*ptr;  
+	signal(SIGALRM, my_alarm);  
 
-	for ( ; ; ) {
-		if ((ptr = getpwnam("sar")) == NULL)
+	
+	alarm(2);
+
+	for ( ; ; ) {   
+		if ((ptr = getpwnam("hk")) == NULL){
 			err_sys("getpwnam error");
-		if (strcmp(ptr->pw_name, "sar") != 0)
+		}else{
+			printf("get hk name ok\n");
+		}
+			
+		sleep(2);
+
+		// 意图是打印hk的内容  但是却打印了root的内容  因为信号回调到调用了共享的数据
+		if (strcmp(ptr->pw_name, "hk") != 0)
 			printf("return value corrupted!, pw_name = %s\n", ptr->pw_name);
+			else{
+				//printf("hk return value = 0 \n");
+			}
 	}	
 }

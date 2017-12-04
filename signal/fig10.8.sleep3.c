@@ -10,6 +10,8 @@ sig_alrm(int signo)
 	longjmp(env_alrm, 1);
 }
 
+
+//模拟sleep2
 unsigned int
 sleep2(unsigned int nsecs)
 {

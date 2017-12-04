@@ -77,7 +77,12 @@
 /* OSF/1 actually disables recv() and send() in <sys/socket.h> */
 #ifdef	__osf__
 #undef	recv
-#undef	send#if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
+#undef	send
+#define	recv(a,b,c,d)	recvfrom(a,b,c,d,0,0)
+#define	send(a,b,c,d)	sendto(a,b,c,d,0,0)
+#endif
+
+#if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
 typedef	unsigned char		u_char;
 typedef	unsigned short		u_short;
 typedef	unsigned int		u_int;
@@ -90,20 +95,17 @@ typedef	unsigned int		uint;		/* Sys V compatibility */
 #endif
 
 
+typedef	unsigned char		u_char;
+typedef	unsigned short		u_short;
+typedef	unsigned int		u_int;
 
 
-#define	recv(a,b,c,d)	recvfrom(a,b,c,d,0,0)
-#define	send(a,b,c,d)	sendto(a,b,c,d,0,0)
-#endif
+
 
 #ifndef	INADDR_NONE
 /* $$.Ic INADDR_NONE$$ */
 #define	INADDR_NONE	0xffffffff	/* should have been in <netinet/in.h> */
 #endif
-
-
-
-
 
 #ifndef	SHUT_RD				/* these three POSIX names are new */
 #define	SHUT_RD		0	/* shutdown for reading */

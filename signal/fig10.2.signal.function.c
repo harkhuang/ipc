@@ -30,6 +30,32 @@ hk@ubuntu14:/mnt/ipcframe/signal$ kill -l
 3.创建了子进程 这些信号的定义显得更有意义
 4.目前只有信号定义 没有发生信号的动作  paue 十个阻塞状态 等待信号来临
 
+
+
+
+
+
+*/
+
+
+
+
+
+/*
+
+使用说明:g++编译
+
+//# ./a.out &
+[1] 2809
+# ps -aux |grep a.out 
+root      2809  0.0  0.0   2028   276 pts/9    S    14:34   0:00 ./a.out
+root      2811  0.0  0.0   6108   864 pts/9    S+   14:34   0:00 grep --color=auto a.out
+# kill -10 2809
+# received SIGUSR1   10  
+# ps -aux |grep a.out 
+//root      2809  0.0  0.0   2032   276 pts/9    S    14:34   0:00 ./a.out
+root      2813  0.0  0.0   6108   868 pts/9    S+   14:34   0:00 grep --color=auto a.out
+
 */
 int
 main(void)

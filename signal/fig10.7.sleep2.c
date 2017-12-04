@@ -7,6 +7,10 @@ sig_alrm(int signo)
 	/* nothing to do, just return to wake up the pause */
 }
 
+
+
+
+//  模拟的第一个sleep函数
 unsigned int
 sleep1(unsigned int nsecs)
 {
