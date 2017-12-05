@@ -11,10 +11,21 @@
 - [ ] 10.1 
 - [ ] 10.2 
 - [ ] 10.3
-- [ ] 10.4
+- [ ] 10.4  signal function
 - [ ] 10.5  Signal System interrupt 
 - [ ] 10.5
  
+
+### 10.4 signal function
+
+```
+Linux 2.0之前版本
+void (*signal (int signo, void (*func)(int))) (int);
+Linux 2.6 版本
+typedef void (*__sighandler_t) (int);
+extern __sighandler_t signal (int __sig, __sighandler_t __handler)
+```
+
 ### 10.5 中断当系统调用
 #### 1. 历史原因
 

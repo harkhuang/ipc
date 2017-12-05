@@ -34,17 +34,18 @@ hk@ubuntu14:/mnt/ipcframe/signal$ kill -l
 
 
 
-
 */
 
-
+//Linux 2.0之前版本
+void (*signal (int signo, void (*func)(int))) (int);
+//Linux 2.6 版本
+typedef void (*__sighandler_t) (int); //定义函数指针
+extern __sighandler_t signal (int __sig, __sighandler_t __handler) //__sighandler_t返回值是函数指针类型
 
 
 
 /*
-
 使用说明:g++编译
-
 //# ./a.out &
 [1] 2809
 # ps -aux |grep a.out 
