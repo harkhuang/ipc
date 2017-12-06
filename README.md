@@ -1,18 +1,17 @@
 # LinuxIpcFrameWork
-ipcframe base library    
-
-
+ipcframe base library  Demo
 ### io advance poll epoll select noblock
 
-
-### add signal base demo  2017年12月1日 17:55:48
-
-
-### 完成信号章节代码的理解2017年12月5日 08:56:15  
-
-
-### 基于sleep函数实现的用户态内核态切换  
+### signal
  
-### 基于longjmp和setjmp函数本地context切换  涉及到环境变量  信号掩码等
 
-### 未决信号的定义   从信号产生  到   递送完成   这期间是内核态到用户态切换的过程
+ToDoList
+
+- [x] add signal base demo  
+- [x] 基于sleep函数实现的用户态内核态切换  
+- [x] 基于longjmp和setjmp函数本地context切换  涉及到环境变量  信号掩码等 (协程处理.. 单线程切换上下文)
+- [x] 未决信号的定义   从信号产生  到   递送完成   这期间是内核态到用户态切换的过程
+- [x] sleep基于信号的实现 考虑三个问题原捕获程序  原来信号状态  信号处理的竞争  
+- [ ]
+ 
+ 

@@ -1,6 +1,6 @@
-#include	<setjmp.h>
-#include	<signal.h>
-#include	<unistd.h>
+#include <setjmp.h>
+#include <signal.h>
+#include <unistd.h>
 #include <stdio.h>
 static jmp_buf	env_alrm;
 
