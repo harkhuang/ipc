@@ -6,7 +6,8 @@ static jmp_buf	env_alrm;
 
 
 
-// 通过setjmp 返回值不同 和 longjmp来跳转
+// 通过setjmp 返回值不同 和 longjmp来跳转  
+// 解决了sleep先结束 引起的竞争错误
 static void sig_alrm(int signo){
 	longjmp(env_alrm, 1);// 通常第二个参数都默认写成1
 }

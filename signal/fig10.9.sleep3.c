@@ -29,13 +29,13 @@ unsigned int sleep2(unsigned int nsecs){
 }
 
 
-int main(void){
 
-	jishi();
+// 用例告诉我们不能轻易决定实际运行到底是谁先结束
+int main(void){
 	unsigned int	unslept;
 	if (signal(SIGINT, sig_int) == SIG_ERR)
 		printf("signal(SIGINT) error\n");
-	unslept = sleep2(5);
+	unslept = sleep2(1);
 	printf("sleep2 returned: %u\n", unslept);
 	exit(0);
 }
@@ -45,16 +45,22 @@ sig_int(int signo)
 {
 	int				i, j;
 	volatile int	k;
-
 	/*
 	 * Tune these loops to run for more than 5 seconds
 	 * on whatever system this test program is run.
 	 */
+	long long L1,L2,L3;
+	timeval tv;
+	gettimeofday(&tv,NULL);
+	L1 = tv.tv_sec;
 	printf("\nsig_int starting\n");
 	for (i = 0; i < 300000; i++)
 		for (j = 0; j < 4000; j++)
 			k += i * j;
 	printf("sig_int finished\n");
+	gettimeofday(&tv,NULL);
+	L2 = tv.tv_sec;
+	printf("%lld    /n",L2-L1 );
 }
 
 
@@ -65,8 +71,8 @@ void  jishi(){
 	
 	//取一个时间
 	gettimeofday(&tv,NULL);
-	L1 = tv.tv_sec*1000*1000 + tv.tv_usec;
- 
+	//L1 = tv.tv_sec*1000*1000 + tv.tv_usec;
+	L1 = tv.tv_sec;
 	//执行一些代码,如算法1...
 		printf("\nsig_int starting\n");
 	for (i = 0; i < 300000; i++)
@@ -75,7 +81,7 @@ void  jishi(){
 	printf("sig_int finished\n");
 	//第二次取时间
 	gettimeofday(&tv,NULL);
-	L2 = tv.tv_sec*1000*1000+tv.tv_usec;
-
-	printf("%lld    /n",L2-L1 );
+	//L2 = tv.tv_sec*1000*1000+tv.tv_usec;
+	L2 = tv.tv_sec;
+	printf("%lld    \n",L2-L1 );
 }
