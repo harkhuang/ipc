@@ -1,5 +1,10 @@
-#include "apue.h"
-
+#include <setjmp.h>
+#include <signal.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#define  MAXLINE  20
 static void	sig_alrm(int);
 
 int
@@ -9,11 +14,11 @@ main(void)
 	char	line[MAXLINE];
 
 	if (signal(SIGALRM, sig_alrm) == SIG_ERR)
-		err_sys("signal(SIGALRM) error");
+		printf("signal(SIGALRM) error");
 
 	alarm(10);
 	if ((n = read(STDIN_FILENO, line, MAXLINE)) < 0)
-		err_sys("read error");
+		printf("read error");
 	alarm(0);
 
 	write(STDOUT_FILENO, line, n);
