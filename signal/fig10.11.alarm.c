@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+ #include <stdio.h>
 #include <sys/time.h>
 #define  MAXLINE  20
 
@@ -23,7 +24,8 @@ main(void)
 
 	alarm(10);
 	if ((n = read(STDIN_FILENO, line, MAXLINE)) < 0)
-		printf("read error");
+		printf("read error\n");
+		flush();
 	alarm(0);
 
 	write(STDOUT_FILENO, line, n);
