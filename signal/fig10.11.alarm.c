@@ -25,7 +25,6 @@ main(void)
 	alarm(10);
 	if ((n = read(STDIN_FILENO, line, MAXLINE)) < 0)
 		printf("read error\n");
-		flush();
 	alarm(0);
 
 	write(STDOUT_FILENO, line, n);
