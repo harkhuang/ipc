@@ -4,11 +4,11 @@
 void
 pr_mask(const char *str)
 {
-	sigset_t	sigset;
-	int			errno_save;
+	sigset_t	sigset;//  保存信号掩码的结构体
+	int			errno_save; // 
 
 	errno_save = errno;		/* we can be called by signal handlers */
-	if (sigprocmask(0, NULL, &sigset) < 0)
+	if (sigprocmask(0, NULL, &sigset) < 0)  // 掩码的容错处理
 		err_sys("sigprocmask error");
 
 	printf("%s", str);

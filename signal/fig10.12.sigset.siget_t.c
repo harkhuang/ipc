@@ -4,6 +4,9 @@
 /* <signal.h> usually defines NSIG to include signal number 0 */
 #define	SIGBAD(signo)	((signo) <= 0 || (signo) >= NSIG)
 
+
+
+// 用sigset_t 类型保存信号集
 int
 sigaddset(sigset_t *set, int signo)
 {

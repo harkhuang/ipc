@@ -15,12 +15,16 @@ main(void)
 	 */
 	sigemptyset(&newmask);
 	sigaddset(&newmask, SIGQUIT);
-	if (sigprocmask(SIG_BLOCK, &newmask, &oldmask) < 0)
+
+
+
+	// 这个函数的实现能保存信号暂时的状态  并且进行另外一种信号通信改变系统
+	if (sigprocmask(SIG_BLOCK, &newmask, &oldmask) < 0)   // 设置新的信号集为BLOCK   保存旧信号集 
 		err_sys("SIG_BLOCK error");
 
 	sleep(5);	/* SIGQUIT here will remain pending */
 
-	if (sigpending(&pendmask) < 0)
+	if (sigpending(&pendmask) < 0)  //有点困惑这个函数
 		err_sys("sigpending error");
 	if (sigismember(&pendmask, SIGQUIT))
 		printf("\nSIGQUIT pending\n");
