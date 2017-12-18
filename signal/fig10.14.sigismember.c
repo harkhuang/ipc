@@ -1,6 +1,7 @@
-#include "apue.h"
+ 
 #include <errno.h>
-
+#include	<signal.h>
+#include <stdio.h>
 void
 pr_mask(const char *str)
 {
@@ -9,7 +10,7 @@ pr_mask(const char *str)
 
 	errno_save = errno;		/* we can be called by signal handlers */
 	if (sigprocmask(0, NULL, &sigset) < 0)  // 掩码的容错处理
-		err_sys("sigprocmask error");
+		printf("sigprocmask error");
 
 	printf("%s", str);
 	if (sigismember(&sigset, SIGINT))   printf("SIGINT ");
@@ -21,4 +22,10 @@ pr_mask(const char *str)
 
 	printf("\n");
 	errno = errno_save;
+}
+
+
+
+int main(){
+	return 0;
 }
