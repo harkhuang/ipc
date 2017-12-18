@@ -1,12 +1,7 @@
-#include <errno.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 
 
 // 模拟signal函数
-typedef	void	Sigfunc(int);
+
 
 /* Reliable version of signal(), using POSIX sigaction().  */
 Sigfunc *
@@ -32,7 +27,7 @@ signal(int signo, Sigfunc *func)
 	}
 
 	// 吧新的sigaction 写入  保留旧的信号行为
-	// sigaction 的引入让信号变得更加生动
+	// sigaction 
 	if (sigaction(signo, &act, &oact) < 0)
 		return(SIG_ERR);
 	return(oact.sa_handler);

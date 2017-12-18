@@ -1,4 +1,9 @@
-#include "apue.h"
+#include <errno.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+typedef	void	Sigfunc(int);
+
 
 Sigfunc *
 signal_intr(int signo, Sigfunc *func)
@@ -14,4 +19,8 @@ signal_intr(int signo, Sigfunc *func)
 	if (sigaction(signo, &act, &oact) < 0)
 		return(SIG_ERR);
 	return(oact.sa_handler);
+}
+
+int main(){
+	return 0;
 }

@@ -25,6 +25,11 @@ main(void)
 		pause();
 }
 
+
+
+
+
+
 static void
 sig_usr1(int signo)
 {
