@@ -1,4 +1,7 @@
-#include "apue.h"
+#include <errno.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <setjmp.h>
 #include <time.h>
 
@@ -27,6 +30,31 @@ main(void)
 
 
 
+// 信号集探测函数
+void
+pr_mask(const char *str)
+{
+	sigset_t	sigset;//  保存信号掩码的结构体
+	int			errno_save; // 
+
+	errno_save = errno;		/* we can be called by signal handlers */
+	if (sigprocmask(0, NULL, &sigset) < 0)  // 掩码的容错处理
+		printf("sigprocmask error");
+
+	printf("%s", str);
+
+	// 探测信号集中是否包含此函数
+	if (sigismember(&sigset, SIGINT))   printf("SIGINT ");
+	if (sigismember(&sigset, SIGQUIT))  printf("SIGQUIT ");
+	if (sigismember(&sigset, SIGUSR1))  printf("SIGUSR1 ");
+	if (sigismember(&sigset, SIGALRM))  printf("SIGALRM ");
+
+	/* remaining signals can go here  */
+
+	printf("\n");
+	errno = errno_save;
+}
+
 
 
 
@@ -50,8 +78,12 @@ sig_usr1(int signo)
 	siglongjmp(jmpbuf, 1);	/* jump back to main, don't return */
 }
 
+
+
 static void
 sig_alrm(int signo)
 {
 	pr_mask("in sig_alrm: ");
 }
+
+
