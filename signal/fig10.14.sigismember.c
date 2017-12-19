@@ -2,6 +2,11 @@
 #include <errno.h>
 #include	<signal.h>
 #include <stdio.h>
+
+
+
+//  探测进程中的信号
+
 void
 pr_mask(const char *str)
 {

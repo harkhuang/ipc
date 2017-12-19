@@ -1,6 +1,13 @@
-#include "apue.h"
+#include <errno.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <setjmp.h>
+#include <time.h>
 
 static void	sig_int(int);
+
+#define err_sys(fmt, args...)  printf(fmt, ##args)
 
 int
 main(void)

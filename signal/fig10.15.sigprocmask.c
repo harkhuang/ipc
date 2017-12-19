@@ -39,9 +39,16 @@ int  main(void)
 
 	sleep(5);	/* SIGQUIT here will remain pending */
 
-	if (sigpending(&pendmask) < 0)  //有点困惑这个函数
+
+
+	// 这里记录阻塞函数 虽然不立即做反映  但是记录这个信号曾经发生过   后面有对应的相应函数
+	if (sigpending(&pendmask) < 0)  //有点困惑这个函数?????   
 		err_sys("sigpending error");
-	if (sigismember(&pendmask, SIGQUIT))
+
+
+
+		// 一个完善的信号处理行为会影响未决信号  要对这些未决信号  做了完善的处理  才是完善健壮的程序
+	if (sigismember(&pendmask, SIGQUIT))  // 查询未决信号   对这些未决信号做处理  
 		printf("\nSIGQUIT pending\n");
 
 	/*
