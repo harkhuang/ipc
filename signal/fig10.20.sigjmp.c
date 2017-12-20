@@ -5,28 +5,11 @@
 #include <setjmp.h>
 #include <time.h>
 
+#define err_sys(fmt, args...)  printf(fmt, ##args)
+
 static void						sig_usr1(int), sig_alrm(int);
 static sigjmp_buf				jmpbuf;
 static volatile sig_atomic_t	canjump;
-
-int
-main(void)
-{
-	if (signal(SIGUSR1, sig_usr1) == SIG_ERR)
-		err_sys("signal(SIGUSR1) error");
-	if (signal(SIGALRM, sig_alrm) == SIG_ERR)
-		err_sys("signal(SIGALRM) error");
-	pr_mask("starting main: ");		/* {Prog prmask} */
-
-	if (sigsetjmp(jmpbuf, 1)) {
-		pr_mask("ending main: ");
-		exit(0);
-	}
-	canjump = 1;	/* now sigsetjmp() is OK */
-
-	for ( ; ; )
-		pause();
-}
 
 
 
@@ -87,3 +70,21 @@ sig_alrm(int signo)
 }
 
 
+int
+main(void)
+{
+	if (signal(SIGUSR1, sig_usr1) == SIG_ERR)
+		err_sys("signal(SIGUSR1) error");
+	if (signal(SIGALRM, sig_alrm) == SIG_ERR)
+		err_sys("signal(SIGALRM) error");
+	pr_mask("starting main: ");		/* {Prog prmask} */
+
+	if (sigsetjmp(jmpbuf, 1)) {
+		pr_mask("ending main: ");
+		exit(0);
+	}
+	canjump = 1;	/* now sigsetjmp() is OK */
+
+	for ( ; ; )
+		pause();
+}

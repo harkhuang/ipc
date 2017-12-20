@@ -1,4 +1,4 @@
-﻿project(Signal)
+project(signal)
 cmake_minimum_required(VERSION 2.6)
 
 #include_directories(./1-factory/  )
@@ -9,6 +9,5 @@ cmake_minimum_required(VERSION 2.6)
 #
 #add_executable(factory ${src_factory})
 #add_executable(abstractfactory ${src_abstractfactory})
-
 
 add_executable(20sigjmp fig10.20.sigjmp.c)

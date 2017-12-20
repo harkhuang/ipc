@@ -1,4 +1,10 @@
-#include "apue.h"
+#include <errno.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <setjmp.h>
+#include <time.h>
+
 
 static volatile sig_atomic_t sigflag; /* set nonzero by sig handler */
 static sigset_t newmask, oldmask, zeromask;

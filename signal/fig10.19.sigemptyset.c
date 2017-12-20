@@ -4,7 +4,10 @@
 #include <stdlib.h>
 typedef	void	Sigfunc(int);
 
+#define err_sys(fmt, args...)  printf(fmt, ##args)
 
+
+//同18几乎没有区别
 Sigfunc *
 signal_intr(int signo, Sigfunc *func)
 {
