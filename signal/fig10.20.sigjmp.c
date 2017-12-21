@@ -12,7 +12,6 @@ static sigjmp_buf				jmpbuf;
 static volatile sig_atomic_t	canjump;
 
 
-
 // 信号集探测函数
 void
 pr_mask(const char *str)
@@ -38,19 +37,15 @@ pr_mask(const char *str)
 	errno = errno_save;
 }
 
-
-
-
-static void
-sig_usr1(int signo)
+static void sig_usr1(int signo)
 {
-	time_t	starttime;
+	time_t	starttime;   // 时间变量结构体
 
-	if (canjump == 0)
+	if (canjump == 0)   // 未知信号   做忽略处理
 		return;		/* unexpected signal, ignore */
 
-	pr_mask("starting sig_usr1: ");
-	alarm(3);				/* SIGALRM in 3 seconds */
+	pr_mask("starting sig_usr1: ");   // 探测usr1时信号集
+	alarm(3);				/* SIGALRM in 3 seconds */  
 	starttime = time(NULL);
 	for ( ; ; )				/* busy wait for 5 seconds */
 		if (time(NULL) > starttime + 5)
@@ -75,7 +70,7 @@ main(void)
 {
 	if (signal(SIGUSR1, sig_usr1) == SIG_ERR)
 		err_sys("signal(SIGUSR1) error");
-	if (signal(SIGALRM, sig_alrm) == SIG_ERR)
+	if (signal(SIGALRM, sig_alrm) == SIG_ERR)   // 时钟信号做默认探测处理
 		err_sys("signal(SIGALRM) error");
 	pr_mask("starting main: ");		/* {Prog prmask} */
 
