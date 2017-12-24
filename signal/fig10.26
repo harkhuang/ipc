@@ -15,11 +15,11 @@ sig_chld(int signo)
 int
 main(void)
 {
-	if (signal(SIGINT, sig_int) == SIG_ERR)
+	if (signal(SIGINT, sig_int) == SIG_ERR) // 捕获进程退出
 		err_sys("signal(SIGINT) error");
-	if (signal(SIGCHLD, sig_chld) == SIG_ERR)
+	if (signal(SIGCHLD, sig_chld) == SIG_ERR) //捕获子进程退出
 		err_sys("signal(SIGCHLD) error");
-	if (system("/bin/ed") < 0)
+	if (system("/bin/ed") < 0) // 执行一个系统函数
 		err_sys("system() error");
 	exit(0);
 }
