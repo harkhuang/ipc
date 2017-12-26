@@ -1,6 +1,6 @@
 #include <stdio.h>  
 #include <setjmp.h>  
-#include <unitd.h>
+//#include <unitd.h>
 #include <stdlib.h>
 
 #define TOK_ADD 5  
@@ -13,7 +13,7 @@ void do_line(char *ptr);
 void cmd_add(void);  
 int  get_token(void);  
   
-int main(int argc, char **argv)  
+int test_jump1(int argc, char **argv)  
 {  
     char line[MAXLINE];  
     int  ret = 0;  
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
   
   
   
-void do_line(char *ptr)  
+void do_line1(char *ptr)  
 {  
     int cmd;  
   
@@ -43,7 +43,7 @@ void do_line(char *ptr)
     }     
 }  
   
-void cmd_add(void) {  
+void cmd_add1(void) {  
     int token;  
     token = get_token();  
     if (token < 0)  {  
@@ -51,6 +51,6 @@ void cmd_add(void) {
     }  
 }  
   
-int get_token(void) {  
+int get_token1(void) {  
     return TOK_ADD;  
 }  

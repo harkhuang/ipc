@@ -39,7 +39,7 @@ sleep2(unsigned int nsecs)
 
 
 //不懂为什么避免了竞争?
-int main()
+int test8()
 {
 	// 预期执行五秒  但是sleep1实现代码中  却中断了 alarm 时钟  
 	// 多次调用时钟信号  后面的信号会覆盖前面的信号

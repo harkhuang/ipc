@@ -11,7 +11,7 @@ void raise_exception(void)
     printf("this line should never appear\n");
 }
 
-int main(void)
+int test_setjmp(void)
 {
     if (setjmp(j) == 0)
     {

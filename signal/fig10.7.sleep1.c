@@ -37,7 +37,7 @@ void func(void ){
 	pause();
 }
 
-int main()
+int test7()
 {
 	//alarm(5);  // 问题1	:多次调用时钟信号  后面的信号会覆盖前面的信号
 	sleep1(1);

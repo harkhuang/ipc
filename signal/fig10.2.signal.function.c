@@ -1,7 +1,17 @@
-#include "apue.h"
+#include <signal.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <errno.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <setjmp.h>
+#include <time.h>
+
 
 static void	sig_usr(int);	/* one handler for both signals */
 static void	sig_usr1( int);
+ 
 
 /*
 
@@ -40,7 +50,7 @@ hk@ubuntu14:/mnt/ipcframe/signal$ kill -l
 void (*signal (int signo, void (*func)(int))) (int);
 //Linux 2.6 版本
 typedef void (*__sighandler_t) (int); //定义函数指针
-extern __sighandler_t signal (int __sig, __sighandler_t __handler) //__sighandler_t返回值是函数指针类型
+extern __sighandler_t signal (int __sig, __sighandler_t __handler); //__sighandler_t返回值是函数指针类型
 
 
 
@@ -59,9 +69,8 @@ root      2813  0.0  0.0   6108   868 pts/9    S+   14:34   0:00 grep --color=au
 
 */
 int
-main(void)
+test2(void)
 {
-	
 	if (signal(SIGUSR2, sig_usr) == SIG_ERR)
 		err_sys("can't catch SIGUSR2");
 	if (signal(SIGUSR1, sig_usr1) == SIG_ERR)
@@ -86,7 +95,8 @@ sig_usr(int signo)		/* argument is signal number */
 	else if (signo == SIGUSR2)
 		printf("received SIGUSR2  %d  \n",signo);
 	else
-		err_dump("received signal %d\n", signo);
+		//err_dump("received signal %d\n", signo);
+		printf("received signal %d\n", signo);
 }
 
 static void
@@ -97,6 +107,7 @@ sig_usr1(int musthavapara )		/* argument is signal number */
 	else if (musthavapara == SIGUSR2)
 		printf("received SIGUSR2 in sig_usr1 \n");
 	else
-		err_dump("received signal in sig_usr1\n");
+		//err_dump("received signal in sig_usr1\n");
+		printf("received signal in sig_usr1\n");
 }
 

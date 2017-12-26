@@ -15,7 +15,7 @@ read_alarm(int signo)
     return;  
 }  
   
-int main()  
+int test_alarm()  
 {  
     int conn_sock;  
     struct sockaddr_in ser_addr;  

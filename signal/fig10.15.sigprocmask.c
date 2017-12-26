@@ -20,7 +20,7 @@ sig_quit(int signo)
 		err_sys("can't reset SIGQUIT");
 }
 
-int  main(void)
+int  test15(void)
 {
 	sigset_t	newmask, oldmask, pendmask;
 

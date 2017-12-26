@@ -15,7 +15,7 @@ alarm  和 read 在内核中处于竞争关系
 问题:  程序在执行后没有输入一直处于挂起状态? 为什么
 */
 int
-main(void)
+test10(void)
 {
 	int		n;
 	char	line[MAXLINE];

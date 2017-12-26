@@ -11,7 +11,7 @@ static void		sig_alrm(int);
 static jmp_buf	env_alrm;
 
 int
-main(void)
+test11(void)
 {
 	int		n;
 	char	line[MAXLINE];
@@ -28,7 +28,7 @@ main(void)
 	alarm(0);
 
 	write(STDOUT_FILENO, line, n);
-	exit(0);
+	//exit(0);
 }
 
 static void

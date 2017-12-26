@@ -31,6 +31,6 @@ pr_mask(const char *str)
 
 
 
-int main(){
+int test14(){
 	return 0;
 }

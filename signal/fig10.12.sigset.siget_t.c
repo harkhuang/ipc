@@ -32,7 +32,7 @@ sigismember1(const unsigned long *set, int signo)
 	return((*set & (1 << (signo - 1))) != 0);
 }
 
-int main(){
+int test12(){
 
 	int data = 100;
 	//turn on isUsed

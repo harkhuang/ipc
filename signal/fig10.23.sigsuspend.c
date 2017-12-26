@@ -22,7 +22,7 @@ sig_int(int signo)	/* one signal handler for SIGINT and SIGQUIT */
 }
 
 int
-main(void)
+main23(void)
 {
 	sigset_t	newmask, oldmask, zeromask;  //  定义 old信号集   new信号集  0信号集
  

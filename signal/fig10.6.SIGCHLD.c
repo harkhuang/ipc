@@ -1,4 +1,12 @@
-#include	"apue.h"
+#include <signal.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <errno.h>
+ 
+#include <stdlib.h>
+#include <setjmp.h>
+#include <time.h>
+
 #include	<sys/wait.h>
 static void	sig_cld(int);
 typedef	unsigned char		u_char;
@@ -25,7 +33,7 @@ status = 0
 
 
 int
-main()
+test6()
 {
 	pid_t	pid;
 

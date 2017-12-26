@@ -111,7 +111,7 @@ my_alarm(int signo)
 
 
 // 程序目的  回调和主调同事调用不安全的函数getpwnam获取不同的结果
-int main(void)
+int test5(void)
 {
 	struct passwd	*ptr;  
 	signal(SIGALRM, my_alarm);  

@@ -14,7 +14,7 @@ static volatile sig_atomic_t	canjump;
 
 // 信号集探测函数
 void
-pr_mask(const char *str)
+pr_mask1(const char *str)
 {
 	sigset_t	sigset;//  保存信号掩码的结构体
 	int			errno_save; // 
@@ -61,21 +61,21 @@ static void sig_usr1(int signo)
 static void
 sig_alrm(int signo)
 {
-	pr_mask("in sig_alrm: ");
+	pr_mask1("in sig_alrm: ");
 }
 
 
 int
-main(void)
+test20(void)
 {
 	if (signal(SIGUSR1, sig_usr1) == SIG_ERR)
 		err_sys("signal(SIGUSR1) error");
 	if (signal(SIGALRM, sig_alrm) == SIG_ERR)   // 时钟信号做默认探测处理
 		err_sys("signal(SIGALRM) error");
-	pr_mask("starting main: ");		/* {Prog prmask} */
+	pr_mask1("starting main: ");		/* {Prog prmask} */
 
 	if (sigsetjmp(jmpbuf, 1)) {
-		pr_mask("ending main: ");
+		pr_mask1("ending main: ");
 		exit(0);
 	}
 	canjump = 1;	/* now sigsetjmp() is OK */

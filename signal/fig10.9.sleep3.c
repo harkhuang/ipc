@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <time.h>
 static void  jishi();
 unsigned int	sleep2(unsigned int);
 static void		sig_int(int);
@@ -15,7 +16,7 @@ static void sig_alrm(int signo){
 	longjmp(env_alrm, 1);// 通常第二个参数都默认写成1
 }
  
-unsigned int sleep2(unsigned int nsecs){
+unsigned int sleep3(unsigned int nsecs){
 	if (signal(SIGALRM, sig_alrm) == SIG_ERR)  
 		return(nsecs);
 	// 这行代码的意义就是确定了  alarm和pause的先后顺序
@@ -31,11 +32,11 @@ unsigned int sleep2(unsigned int nsecs){
 
 
 // 用例告诉我们不能轻易决定实际运行到底是谁先结束
-int main(void){
+int test9(void){
 	unsigned int	unslept;
 	if (signal(SIGINT, sig_int) == SIG_ERR)
 		printf("signal(SIGINT) error\n");
-	unslept = sleep2(1);
+	unslept = sleep3(1);
 	printf("sleep2 returned: %u\n", unslept);
 	exit(0);
 }
@@ -50,7 +51,7 @@ sig_int(int signo)
 	 * on whatever system this test program is run.
 	 */
 	long long L1,L2,L3;
-	timeval tv;
+	struct timeval tv;
 	gettimeofday(&tv,NULL);
 	L1 = tv.tv_sec;
 	printf("\nsig_int starting\n");
@@ -67,7 +68,7 @@ sig_int(int signo)
 void  jishi(){
 	int i=0,j=0,k=0;
 	long long L1,L2,L3;
-	timeval tv;
+	struct timeval tv;
 	
 	//取一个时间
 	gettimeofday(&tv,NULL);

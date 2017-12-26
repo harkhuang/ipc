@@ -69,7 +69,7 @@ void maketimeout2(){
 }
 
 
-int main(void)
+int test_readtimeout(void)
 {
     test_read_time_out();
     maketimeout1();

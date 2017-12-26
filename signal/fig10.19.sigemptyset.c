@@ -24,6 +24,6 @@ signal_intr(int signo, Sigfunc *func)
 	return(oact.sa_handler);
 }
 
-int main(){
+int test19(){
 	return 0;
 }

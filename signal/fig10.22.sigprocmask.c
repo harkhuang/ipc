@@ -11,7 +11,7 @@ static void	sig_int(int);
 
 // 信号集   探测函数
 void
-pr_mask(const char *str)
+pr_mask3(const char *str)
 {
 	sigset_t	sigset;//  保存信号掩码的结构体
 	int			errno_save; //   
@@ -39,13 +39,13 @@ pr_mask(const char *str)
 
 
 int
-main(void)
+test22(void)
 {
 
 	// 其实sigset_t define long long  sigset_t
 	sigset_t	newmask, oldmask, waitmask; // 定义几个需要初始化的信号
 
-	pr_mask("program start: ");  // 探测当前进程信号集
+	pr_mask3("program start: ");  // 探测当前进程信号集
 
 	if (signal(SIGINT, sig_int) == SIG_ERR)
 		err_sys("signal(SIGINT) error");
@@ -63,7 +63,7 @@ main(void)
 	/*
 	 * Critical region of code.
 	 */
-	pr_mask("in critical region: ");
+	pr_mask3("in critical region: ");
 
 	/*
 	 * Pause, allowing all signals except SIGUSR1.
@@ -71,7 +71,7 @@ main(void)
 	if (sigsuspend(&waitmask) != -1)
 		err_sys("sigsuspend error");
 
-	pr_mask("after return from sigsuspend: ");
+	pr_mask3("after return from sigsuspend: ");
 
 	/*
 	 * Reset signal mask which unblocks SIGINT.
@@ -82,7 +82,7 @@ main(void)
 	/*
 	 * And continue processing ...
 	 */
-	pr_mask("program exit: ");
+	pr_mask3("program exit: ");
 
 	exit(0);
 }
@@ -90,5 +90,5 @@ main(void)
 static void
 sig_int(int signo)
 {
-	pr_mask("\nin sig_int: ");
+	pr_mask3("\nin sig_int: ");
 }

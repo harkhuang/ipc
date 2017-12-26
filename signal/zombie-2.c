@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <errno.h>
 
-int main()
+int test_zombie2()
 {
     pid_t  pid;
     //循环创建子进程

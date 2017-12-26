@@ -14,7 +14,7 @@ void	cmd_add(void);
 int		get_token(void);
 
 int
-main(void)
+test_jmp2(void)
 {
 	char	line[MAXLINE];
 

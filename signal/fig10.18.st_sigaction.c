@@ -48,6 +48,6 @@ signal(int signo, Sigfunc *func)
 }
 
 
-int main(){
+int test18(){
 	return 0;
 }
