@@ -6,7 +6,7 @@
 #include <time.h>
 
  // signal define
-static volatile sig_atomic_t sigflag; /* set nonzero by sig handler */
+static volatile sig_atomic_t sigflag; /* set nonzero by sig handler *///原子操作
 static sigset_t newmask, oldmask, zeromask;
 
 static void
