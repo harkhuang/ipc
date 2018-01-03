@@ -39,7 +39,7 @@ pr_mask3(const char *str)
 
 
 int
-test22(void)
+main(void)
 {
 
 	// 其实sigset_t define long long  sigset_t
@@ -68,7 +68,7 @@ test22(void)
 	/*
 	 * Pause, allowing all signals except SIGUSR1.
 	 */
-	if (sigsuspend(&waitmask) != -1)
+	if (sigsuspend(&waitmask) != -1)  //修改信号集的原子操作
 		err_sys("sigsuspend error");
 
 	pr_mask3("after return from sigsuspend: ");
