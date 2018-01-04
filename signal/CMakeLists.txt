@@ -6,6 +6,7 @@ aux_source_directory(./fig10.25.abort.c  SRC_ABORT)
 aux_source_directory(./fig10.24.waitsignal.c  SRC_WAIT)
 aux_source_directory(.  SRC_HELLO)
 
+
 ##添加包含的头文件
 include_directories(. )
 ##添加库文件路径

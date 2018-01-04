@@ -42,7 +42,7 @@ int  test15(void)
 
 
 	// 这里记录阻塞函数 虽然不立即做反映  但是记录这个信号曾经发生过   后面有对应的相应函数
-	if (sigpending(&pendmask) < 0)  //有点困惑这个函数?????   
+	if (sigpending(&pendmask) < 0)  //有点困惑这个函数?????     消费信号  在这里进行阻塞
 		err_sys("sigpending error");
 
 
