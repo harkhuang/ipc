@@ -3,21 +3,23 @@
 #include	<signal.h>
 #include	<unistd.h>
 
+
+// system 函数的系统实现
 int
 system(const char *cmdstring)	/* with appropriate signal handling */
 {
-	pid_t				pid;
-	int					status;
-	struct sigaction	ignore, saveintr, savequit;
+	pid_t				pid;  //定义一个进程id
+	int					status; // 定一个状态值标记
+	struct sigaction	ignore, saveintr, savequit;  // 定义信号集
 	sigset_t			chldmask, savemask;
 
-	if (cmdstring == NULL)
+	if (cmdstring == NULL) // 查看传递进来的命令
 		return(1);		/* always a command processor with UNIX */
 
-	ignore.sa_handler = SIG_IGN;	/* ignore SIGINT and SIGQUIT */
-	sigemptyset(&ignore.sa_mask);
-	ignore.sa_flags = 0;
-	if (sigaction(SIGINT, &ignore, &saveintr) < 0)
+	ignore.sa_handler = SIG_IGN;	/* ignore SIGINT and SIGQUIT */   // 定义一个忽略信号
+	sigemptyset(&ignore.sa_mask); // 定义忽略信号掩码
+	ignore.sa_flags = 0; //定义忽略信号标志信号
+	if (sigaction(SIGINT, &ignore, &saveintr) < 0)  //设置进程当前忽略信号机
 		return(-1);
 	if (sigaction(SIGQUIT, &ignore, &savequit) < 0)
 		return(-1);

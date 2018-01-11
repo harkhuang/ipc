@@ -1,5 +1,9 @@
-#include "apue.h"
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
+#define err_sys(fmt, args...)  printf(fmt, ##args)
 static void
 sig_int(int signo)
 {
