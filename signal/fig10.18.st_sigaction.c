@@ -1,4 +1,3 @@
-
 #include <errno.h>
 #include <signal.h>
 #include <stdio.h>
@@ -6,23 +5,20 @@
  
 #define err_sys(fmt, args...)  printf(fmt, ##args)
 // 模拟signal函数
-
 typedef	void	Sigfunc(int);
-
-
 
 
 // 关心信号   关心信号掩码  关心信号定义的行为
 
-
+/**
+ * 1. sigaction是以什么为单位的?  以信号整体为单位  不局限于进程和线程
+ */
 /* Reliable(可靠的) version of signal(), using POSIX sigaction().  */
 Sigfunc *
 signal(int signo, Sigfunc *func)
 {
 	struct sigaction	act, oact;
-   
-
-    // 1. sigaciton 的初始化
+	// 1. sigaciton 的初始化
 
 	// 设置信号返回函数 清空的信号
 	act.sa_handler = func;
@@ -47,7 +43,4 @@ signal(int signo, Sigfunc *func)
 	return(oact.sa_handler);
 }
 
-
-int test18(){
-	return 0;
-}
+ 

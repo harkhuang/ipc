@@ -22,12 +22,11 @@ sig_quit(int signo)
 
 
 
-/**
- * sigprocmask打开关闭信号阻塞
- * 
- * 
- */
-int  testOfSigprocmask(void)
+
+
+// 通过函数
+
+int  main(void)
 {
 	sigset_t	newmask, oldmask, pendmask;
 
@@ -40,26 +39,19 @@ int  testOfSigprocmask(void)
 	sigemptyset(&newmask);
 	sigaddset(&newmask, SIGQUIT);
 
-	//  sigprocmask 设置进程信号集
-	if (sigprocmask(SIG_BLOCK, &newmask, &oldmask) < 0)   // 设置新的信号集为BLOCK   保存旧信号集 
+	if (sigprocmask(SIG_BLOCK, &newmask, &oldmask) < 0)  
 		err_sys("SIG_BLOCK error");
 
 
-	// 模拟持续消费quit函数
-	sleep(5);	/* SIGQUIT here will remain pending */
+	sleep(5);	/* SIGQUIT here will remain pending */  //remain  保持 pending  未决
 
-
-
-	// 获取未决信号集
 	if (sigpending(&pendmask) < 0)   
 		err_sys("sigpending error");
-
-
-
-	// 探测信号
-	if (sigismember(&pendmask, SIGQUIT))   
+		// 一个完善的信号处理行为会影响未决信号  要对这些未决信号  做了完善的处理  才是完善健壮的程序
+	if (sigismember(&pendmask, SIGQUIT))  // 查询未决信号   对这些未决信号做处理  
 		printf("\nSIGQUIT pending\n");
-
+	if (sigismember(&pendmask, SIGQUIT))  // 查询未决信号   对这些未决信号做处理  
+		printf("\nSIGQUIT pending1\n");
 	/*
 	 * Reset signal mask which unblocks SIGQUIT.
 	 */
