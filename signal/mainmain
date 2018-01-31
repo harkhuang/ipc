@@ -1,11 +1,30 @@
-﻿#include <errno.h>
+#include <errno.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <setjmp.h>
 #include <time.h>
 
+
+/**
+ * 功能:
+ * 
+ * 
+ * 
+ * 
+ * 
+**/
+
 static void	sig_int(int);
+
+
+static void
+sig_int(int signo)
+{
+	pr_mask3("\n in sig_int: ");
+}
+
+
 
 #define err_sys(fmt, args...)  printf(fmt, ##args)
 
@@ -16,8 +35,6 @@ pr_mask3(const char *str)
 	sigset_t	sigset;//  保存信号掩码的结构体
 	int			errno_save; //   
 
-
-
 	// 保存当前系统的错误码  由于信号的存在可能存在多种内核调用问题出现   用此errno记录
 	errno_save = errno;		/* we can be called by signal handlers */
 	if (sigprocmask(0, NULL, &sigset) < 0)  // 掩码的容错处理 取掩码到sigset里面去哦
@@ -26,7 +43,7 @@ pr_mask3(const char *str)
 	printf("%s", str);
 
 	// 探测信号集中是否包含此函数
-	if (sigismember(&sigset, SIGINT))   printf("SIGINT ");  //逐个探测 信号是否在该信号集中存在
+	if (sigismember(&sigset, SIGINT))   printf("SIGINT ");   
 	if (sigismember(&sigset, SIGQUIT))  printf("SIGQUIT ");
 	if (sigismember(&sigset, SIGUSR1))  printf("SIGUSR1 ");
 	if (sigismember(&sigset, SIGALRM))  printf("SIGALRM ");
@@ -39,7 +56,7 @@ pr_mask3(const char *str)
 
 
 int
-test123(void)
+main(void)
 {
 
 	// 其实sigset_t define long long  sigset_t
@@ -68,7 +85,7 @@ test123(void)
 	/*
 	 * Pause, allowing all signals except SIGUSR1.
 	 */
-	if (sigsuspend(&waitmask) != -1)  //修改信号集的原子操作
+	if (sigsuspend(&waitmask) != -1)
 		err_sys("sigsuspend error");
 
 	pr_mask3("after return from sigsuspend: ");
@@ -87,8 +104,3 @@ test123(void)
 	exit(0);
 }
 
-static void
-sig_int(int signo)
-{
-	pr_mask3("\nin sig_int: ");
-}

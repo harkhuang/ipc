@@ -9,6 +9,8 @@
 static volatile sig_atomic_t sigflag; /* set nonzero by sig handler *///原子操作
 static sigset_t newmask, oldmask, zeromask;
 
+
+
 static void
 sig_usr(int signo)	/* one signal handler for SIGUSR1 and SIGUSR2 */
 {
