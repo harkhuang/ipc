@@ -1,8 +1,14 @@
-#include "apue.h"
+ 
 #include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
-
+#include <setjmp.h>
+#include <signal.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+ #include <stdio.h>
+#include <sys/time.h>
 extern int makethread(void *(*)(void *), void *);
 
 struct to_info {
